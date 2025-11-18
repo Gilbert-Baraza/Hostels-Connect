@@ -1,6 +1,6 @@
 // This script now uses the Node.js/MongoDB backend for authentication.
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://hostels-connect.onrender.com/api";
 
 // --- UI Message Helper ---
 function showMessage(message, isError = false) {

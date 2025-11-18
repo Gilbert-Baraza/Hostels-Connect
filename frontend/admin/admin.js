@@ -3,7 +3,7 @@
 // In a real app, you would use JWTs and a proper login flow with the backend.
 
 // --- Globals ---
-const API_URL = "http://localhost:5000/api"; // Your backend URL
+const API_URL = "https://hostels-connect.onrender.com/api"; // Your backend URL
 let hostels = [];
 const hostelList = document.getElementById("hostelList");
 

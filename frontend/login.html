@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Hostels Connect</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body class="login-page">
+  <div class="overlay"></div>
+
+  <div class="main">
+    <form id="form" class="auth-form">
+      <h2>Welcome Back 👋</h2>
+      <p class="sub-text">Login to continue with <strong>Hostels Connect</strong></p>
+      <hr>
+
+      <div class="form-group">
+        <label for="username">Email or Username</label>
+        <input type="text" id="username" placeholder="Enter your email or name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Enter your password" required />
+          <span id="togglePassword">👁️</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login"><strong>Login</strong></button>
+
+      <p class="alt-option">
+        Don’t have an account? <a href="signup.html">Sign Up</a>
+      </p>
+
+      <small class="copyright-text">&copy; 2025 Hostels Connect. All rights reserved.</small>
+    </form>
+  </div>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="admin-container">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, <span id="adminName"></span> 👋</p>
+    <button id="logoutBtn">Logout</button>
+
+    <h3>Pending Hostel Listings</h3>
+    <table id="hostelTable">
+      <thead>
+        <tr>
+          <th>Hostel Name</th>
+          <th>Location</th>
+          <th>Price</th>
+          <th>Landlord</th>
+          <th>Approved?</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="hostelList">
+        <!-- Hostels will load here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module"  src="admin.js"></script>
+</body>
+</html>

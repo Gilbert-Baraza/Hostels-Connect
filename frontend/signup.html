@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Hostel Finder</title>
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body class="signup-page">
+  <!-- 🌆 Background Overlay -->
+  <div class="overlay"></div>
+
+  <div class="main">
+    <form id="signupForm" class="signup-form">
+      <h2>Create Your Account</h2>
+      <p class="subtitle">Join Hostel Finder and connect with students or landlords today!</p>
+      <hr>
+
+      <h4>Full Name</h4>
+      <input type="text" id="name" required>
+
+      <h4>Email</h4>
+      <input type="email" id="email" required>
+
+      <h4>Phone Number</h4>
+      <input 
+        type="tel" 
+        id="phone" 
+        placeholder="e.g. 0712345678" 
+        pattern="[0-9]{10}" 
+        required
+      >
+
+      <h4>Password</h4>
+      <input type="password" id="password" required>
+
+      <h4>Confirm Password</h4>
+      <input type="password" id="confirmPassword" required>
+
+      <h4>Role</h4>
+      <select id="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="student">Student</option>
+        <option value="landlord">Landlord</option>
+      </select>
+
+      <button type="submit"><strong>Sign Up</strong></button>
+
+      <h4 class="reset">Already have an account? <a href="login.html">Login</a></h4>
+      <small>&copy; 2025 Gilbert Baraza. All rights reserved</small>
+    </form>
+  </div>
+
+  <script type="module" src="signup.js"></script>
+
+  
+</body>
+</html>

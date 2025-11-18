@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="layout">
+
+    <button id="sidebarToggle" class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="user-profile-logo.png" class="sidebar-avatar" />
+        <h3 id="studentNameSidebar">Student</h3>
+      </div>
+
+      <nav class="sidebar-links">
+        <a href="#" class="nav-link active" data-page="hostels"><i class="fa-solid fa-building"></i> Hostels</a>
+        <a href="#" class="nav-link" data-page="bookings"><i class="fa-solid fa-bookmark"></i> My Bookings</a>
+        <a href="#" class="nav-link" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+
+
+      </nav>
+
+      <button id="logoutBtn" class="logout-sidebar">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="dashboard-container">
+
+      <!-- Page: Hostels -->
+      <div id="page-hostels" class="page active">
+        <header class="top-header">
+          <div>
+            <h2>Student Dashboard</h2>
+            <p>Welcome, <span id="studentName"></span> 👋</p>
+          </div>
+        </header>
+        <hr />
+        <div class="filters pro-filters">
+          <input type="text" id="searchInput" placeholder="Search hostels..." />
+          <select id="locationFilter">
+            <option value="">All Locations</option>
+            <option value="Kibabii">Kibabii</option>
+            <option value="Namaloko">Namaloko</option>
+            <option value="Kanduyi">Kanduyi</option>
+          </select>
+          <select id="sortFilter">
+            <option value="">Sort By</option>
+            <option value="priceLowHigh">Price: Low → High</option>
+            <option value="priceHighLow">Price: High → Low</option>
+          </select>
+        </div>
+        <h3>Approved Hostels</h3>
+        <div id="hostelContainer"></div>
+      </div>
+
+      <!-- Page: Bookings -->
+      <div id="page-bookings" class="page">
+        <header class="top-header"><h2>My Bookings</h2></header>
+        <hr />
+        <!-- Approval & Contact Info Message Box -->
+        <div id="contactMessageBox" class="message-box" style="display:none;">
+            <h4>Booking Approved!</h4>
+            <p>Your booking has been approved by the landlord. You can now contact them to arrange for payment and check-in.</p>
+            <p><strong>Landlord Contact:</strong> <span id="landlordContact"></span></p>
+        </div>
+        <div id="bookingsContainer"></div>
+      </div>
+       <!-- Page: Settings -->
+       <div id="page-settings" class="page">
+        <header class="top-header"><h2>Settings</h2></header>
+        <hr />
+        <div class="settings-container">
+            <label class="dark-mode-switch">
+                Dark Mode: <input type="checkbox" id="darkModeToggle">
+            </label>
+        </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="hostelModal" class="modal">
+    <div class="modal-content" id="modalContent">
+      <span class="close">&times;</span>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

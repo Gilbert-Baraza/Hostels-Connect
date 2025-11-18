@@ -1,0 +1,656 @@
+/* ============================================== */
+/* MODERN LANDLORD DASHBOARD */
+/* ============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================== */
+/* ROOT VARIABLES */
+:root {
+  /* Brand Colors */
+  --primary-color: #667eea;
+  --primary-dark: #5568d3;
+  --secondary-color: #764ba2;
+  --success-color: #10b981;
+  --success-dark: #059669;
+  --danger-color: #ef4444;
+  --danger-dark: #dc2626;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+  
+  /* Background Colors */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-gradient: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+  
+  /* Text Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-white: #ffffff;
+  
+  /* Border & Shadow */
+  --border-color: #e2e8f0;
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.16);
+  
+  /* Transitions */
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease;
+}
+
+/* ============================================== */
+/* RESET & BASE STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+/* ============================================== */
+/* MAIN CONTAINER */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--bg-secondary);
+  padding: 40px 48px;
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================== */
+/* HEADER SECTION */
+.container > h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.container > p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.container > p span {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* ============================================== */
+/* LOGOUT BUTTON */
+#logoutBtn {
+  background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+  color: var(--text-white);
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  float: right;
+  margin-top: -70px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+  transition: var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.4);
+}
+
+#logoutBtn:active {
+  transform: translateY(0);
+}
+
+/* ============================================== */
+/* SECTION HEADERS */
+h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+h3::before {
+  content: '';
+  width: 4px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 4px;
+}
+
+/* ============================================== */
+/* HORIZONTAL DIVIDER */
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  margin: 40px 0;
+}
+
+/* ============================================== */
+/* FORM STYLES */
+form {
+  background: var(--bg-tertiary);
+  padding: 32px;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 32px;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  transition: var(--transition-base);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+  outline: none;
+  background: var(--bg-secondary);
+}
+
+form input::placeholder,
+form textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+form textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: 'Inter', sans-serif;
+}
+
+form button[type="submit"] {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-white);
+  border: none;
+  padding: 14px 32px;
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  width: 100%;
+  margin-top: 8px;
+}
+
+form button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+}
+
+form button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Hidden input styling */
+input[type="hidden"] {
+  display: none;
+}
+
+/* ============================================== */
+/* TABLE STYLES */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+thead {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+th {
+  padding: 18px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+tbody tr {
+  transition: var(--transition-fast);
+}
+
+tbody tr:hover {
+  background: var(--bg-tertiary);
+  transform: scale(1.01);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Alternate row colors */
+tbody tr:nth-child(even) {
+  background: var(--bg-primary);
+}
+
+/* Empty state for tables */
+tbody:empty::after {
+  content: 'No data available';
+  display: block;
+  text-align: center;
+  padding: 32px;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* ============================================== */
+/* ACTION BUTTONS */
+.approve-booking-btn,
+.reject-booking-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: var(--transition-base);
+  margin: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.approve-booking-btn {
+  background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+  color: var(--text-white);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.approve-booking-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+}
+
+.reject-booking-btn {
+  background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+  color: var(--text-white);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.reject-booking-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+}
+
+.approve-booking-btn:active,
+.reject-booking-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================== */
+/* STATUS BADGES */
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-approved {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #065f46;
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+}
+
+.status-rejected {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+}
+
+/* ============================================== */
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 95%;
+    padding: 32px 36px;
+  }
+  
+  .container > h2 {
+    font-size: 2rem;
+  }
+  
+  #logoutBtn {
+    margin-top: -60px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 16px 12px;
+  }
+  
+  .container {
+    padding: 24px;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .container > h2 {
+    font-size: 1.75rem;
+    margin-bottom: 12px;
+  }
+  
+  .container > p {
+    font-size: 1rem;
+  }
+  
+  #logoutBtn {
+    float: none;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  form {
+    padding: 24px;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  /* Make tables responsive */
+  table {
+    font-size: 0.85rem;
+  }
+  
+  th, td {
+    padding: 12px 10px;
+  }
+  
+  /* Stack table buttons vertically on mobile */
+  .approve-booking-btn,
+  .reject-booking-btn {
+    display: block;
+    width: 100%;
+    margin: 4px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .container > h2 {
+    font-size: 1.5rem;
+  }
+  
+  form {
+    padding: 20px;
+  }
+  
+  form input,
+  form select,
+  form textarea {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive table - convert to cards */
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  tbody tr {
+    margin-bottom: 16px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    background: var(--bg-secondary);
+  }
+  
+  tbody tr:hover {
+    transform: scale(1);
+  }
+  
+  td {
+    border: none;
+    position: relative;
+    padding: 12px 12px 12px 45%;
+    text-align: right;
+  }
+  
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    width: 40%;
+    padding-right: 10px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  
+  /* Adjust button layout in mobile card view */
+  td:has(.approve-booking-btn) {
+    padding: 12px;
+    text-align: center;
+  }
+  
+  td:has(.approve-booking-btn)::before {
+    position: static;
+    display: block;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+}
+
+/* ============================================== */
+/* UTILITY CLASSES */
+.text-center {
+  text-align: center;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mt-4 {
+  margin-top: 24px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ============================================== */
+/* LOADING STATE */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================== */
+/* NOTIFICATION/TOAST STYLES */
+.notification {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  padding: 16px 24px;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  font-weight: 600;
+  animation: slideIn 0.3s ease;
+  z-index: 1000;
+}
+
+.notification.success {
+  background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+  color: var(--text-white);
+}
+
+.notification.error {
+  background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+  color: var(--text-white);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================== */
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ============================================== */
+/* PRINT STYLES */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+  
+  .container {
+    box-shadow: none;
+    border: none;
+  }
+  
+  #logoutBtn,
+  .approve-booking-btn,
+  .reject-booking-btn,
+  form {
+    display: none;
+  }
+  
+  table {
+    box-shadow: none;
+  }
+}

@@ -23,6 +23,10 @@ router.get('/', async (req, res) => {
 // @access  Public (for landlords)
 router.post('/', upload.single('image'), async (req, res) => {
   try {
+    const { name, location, price, roomsAvailable, totalRooms, rulesAndRegulations, landlordId, paymentFrequency, roomType } = req.body;
+    // Fetch landlord's phone number
+    const landlord = await User.findById(req.body.landlordId);
+
     // Upload image to Cloudinary
     const result = await cloudinary.uploader.upload_stream({ resource_type: 'image' }, async (error, result) => {
       if (error || !result) {
@@ -30,15 +34,16 @@ router.post('/', upload.single('image'), async (req, res) => {
         return res.status(500).json({ message: 'Image upload failed.' });
       }
 
-      const newHostel = new Hostel({
-        ...req.body,
-        price: Number(req.body.price), // Ensure price is a number
-        imageUrl: result.secure_url, // Save the image URL from Cloudinary
-        paymentFrequency: req.body.paymentFrequency,
-         roomType: req.body.roomType,
-      });
+      if (!landlord) {
+        return res.status(404).json({ message: 'Landlord not found' });
+      }
 
-      const savedHostel = await newHostel.save();
+      const newHostel = new Hostel({
+        name, location, price, roomsAvailable, totalRooms, rulesAndRegulations,
+        landlord: landlord.name,
+        landlordPhone: landlord.phone,
+        landlordId, paymentFrequency, roomType,
+        imageUrl: result.secure_url, // Save the image URL from Cloudinary
       res.status(201).json(savedHostel);
     }).end(req.file.buffer);
   } catch (err) {

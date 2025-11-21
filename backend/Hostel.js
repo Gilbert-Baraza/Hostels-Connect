@@ -25,6 +25,14 @@ const HostelSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  landlordPhone: {
+    type: String,
+    required: true
+  },
+  landlordPhone: {
+    type: String,
+    required: true
+  },
   landlordId: {
     type: String,
     required: true

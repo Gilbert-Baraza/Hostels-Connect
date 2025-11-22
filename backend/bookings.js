@@ -70,16 +70,19 @@ router.patch('/:id/cancel', async (req, res) => {
         const booking = await Booking.findById(req.params.id);
         if (!booking) return res.status(404).json({ msg: 'Booking not found' });
 
-        const hostel = await Hostel.findById(booking.hostelId);
-        if (!hostel) return res.status(404).json({ msg: 'Hostel not found' });
-
-        hostel.roomsAvailable = (hostel.roomsAvailable || 0) + 1;
-        await hostel.save();
+        // Only increment roomsAvailable if the booking was 'approved'
+        if (booking.status === 'approved') {
+            const hostel = await Hostel.findById(booking.hostelId);
+            if (hostel) {
+                // Use $inc for an atomic update
+                await Hostel.updateOne({ _id: booking.hostelId }, { $inc: { roomsAvailable: 1 } });
+            }
+        }
 
         booking.status = 'cancelled';
         await booking.save();
 
-        res.json({ msg: 'Booking cancelled and hostel updated' });
+        res.json({ msg: 'Booking cancelled successfully' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

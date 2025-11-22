@@ -221,13 +221,9 @@ async function setupStudentDashboard() {
   async function cancelBooking(bookingId) {
     // This uses the special cancel route that also increments the hostel room count
     try {
-      const bookingToCancel = bookings.find(b => b._id === bookingId);
-      if (!bookingToCancel) throw new Error("Booking not found");
-
-      // Only increment room count if the booking was 'approved'
-      const shouldIncrementRoom = bookingToCancel.status === 'approved';
-
-      const response = await fetch(`${API_URL}/bookings/${bookingId}/cancel`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shouldIncrementRoom }) });
+      const response = await fetch(`${API_URL}/bookings/${bookingId}/cancel`, {
+        method: 'PATCH'
+      });
       if (!response.ok) throw new Error('Failed to cancel');
 
       showMessage("❌ Booking cancelled. You can now book another hostel.");

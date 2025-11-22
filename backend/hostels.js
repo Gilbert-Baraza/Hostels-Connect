@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Hostel = require('./Hostel'); // Corrected path
+const User = require('./User'); // Import User model
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const upload = multer({ storage: multer.memoryStorage() });
@@ -23,20 +24,25 @@ router.get('/', async (req, res) => {
 // @access  Public (for landlords)
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { name, location, price, roomsAvailable, totalRooms, rulesAndRegulations, landlordId, paymentFrequency, roomType } = req.body;
-    // Fetch landlord's phone number
+    if (!req.file) {
+      return res.status(400).json({ message: 'Hostel image is required.' });
+    }
+
+    const { landlordId } = req.body;
     const landlord = await User.findById(req.body.landlordId);
 
+    if (!landlord) {
+      return res.status(404).json({ message: 'Landlord not found' });
+    }
+
     // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload_stream({ resource_type: 'image' }, async (error, result) => {
+    cloudinary.uploader.upload_stream({ resource_type: 'image' }, async (error, result) => {
       if (error || !result) {
         console.error('Cloudinary upload error:', error);
         return res.status(500).json({ message: 'Image upload failed.' });
       }
 
-      if (!landlord) {
-        return res.status(404).json({ message: 'Landlord not found' });
-      }
+      const { name, location, price, roomsAvailable, totalRooms, rulesAndRegulations, paymentFrequency, roomType } = req.body;
 
       const newHostel = new Hostel({
         name, location, price, roomsAvailable, totalRooms, rulesAndRegulations,
@@ -44,10 +50,15 @@ router.post('/', upload.single('image'), async (req, res) => {
         landlordPhone: landlord.phone,
         landlordId, paymentFrequency, roomType,
         imageUrl: result.secure_url, // Save the image URL from Cloudinary
+        approved: true // Or false if you want an approval flow
+      });
+
+      const savedHostel = await newHostel.save();
       res.status(201).json(savedHostel);
+
     }).end(req.file.buffer);
   } catch (err) {
-    console.error('Hostel creation error:', err);
+    console.error('Hostel creation error:', err.message);
     res.status(400).json({ message: err.message });
   }
 });

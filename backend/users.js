@@ -82,4 +82,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// @route   GET api/users/:id
+// @desc    Get user by ID (for fetching landlord details)
+// @access  Public (for now, should be protected)
+router.get('/:id', async (req, res) => {
+  try {
+    // Find user but exclude the password from the result
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;

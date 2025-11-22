@@ -1,85 +1,73 @@
-// This script now uses the Node.js/MongoDB backend for authentication.
-
-const API_URL = "https://hostels-connect.onrender.com/api";
-
-// --- UI Message Helper ---
-function showMessage(message, isError = false) {
-  const msgBox = document.createElement('div');
-  msgBox.style.cssText = `
-    position:fixed;top:20px;right:20px;
-    padding:15px;background:${isError ? '#f44336' : '#333'};
-    color:white;border-radius:8px;z-index:10000;
-    box-shadow:0 4px 8px rgba(0,0,0,0.2);
-  `;
-  msgBox.textContent = message;
-  document.body.appendChild(msgBox);
-  setTimeout(() => msgBox.remove(), 4000);
-}
-
-// --- Login Logic ---
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("form");
-  const togglePassword = document.getElementById("togglePassword");
+  const loginForm = document.getElementById("form");
+  const emailInput = document.getElementById("username"); // The input field for email
   const passwordInput = document.getElementById("password");
+  const errorMessageElement = document.getElementById("loginErrorMessage");
+  const togglePassword = document.getElementById("togglePassword");
 
-  if (!form) {
-    console.error("Login form not found!");
-    return;
+  const API_URL = "https://hostels-connect.onrender.com/api";
+
+  // --- Password Visibility Toggle ---
+  if (togglePassword) {
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+    });
   }
 
-  form.addEventListener("submit", async (e) => {
+  // --- Form Submission Logic ---
+  loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById("username").value.trim();
-    const password = passwordInput.value.trim();
-    const loginButton = form.querySelector('button[type="submit"]');
+    // Reset previous errors
+    emailInput.classList.remove("input-error");
+    passwordInput.classList.remove("input-error");
+    errorMessageElement.style.display = "none";
+    errorMessageElement.textContent = "";
 
-    loginButton.disabled = true;
-    loginButton.textContent = 'Logging in...';
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
     try {
       const response = await fetch(`${API_URL}/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.msg || 'Invalid credentials');
+        // This block runs for 4xx/5xx errors, like "Invalid credentials"
+        throw new Error(data.msg || "An error occurred during login.");
       }
 
-      // Store user info and token for session management
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-      localStorage.setItem('token', data.token);
+      // --- On Successful Login ---
+      // Store user data and token in localStorage
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
 
-      // Redirect based on role
-      switch (data.user.role) {
-        case "student":
-          window.location.href = "student/index.html";
-          break;
-        case "landlord":
-          window.location.href = "landlord/index.html";
-          break;
-        case "admin":
-          window.location.href = "admin/index.html";
-          break;
-        default:
-          showMessage("Login successful, but role is unknown.", true);
+      // Redirect based on user role
+      if (data.user.role === "student") {
+        window.location.href = "./student/index.html";
+      } else if (data.user.role === "landlord") {
+        window.location.href = "./landlord/index.html";
+      } else {
+        // Default redirect if role is not student or landlord
+        console.warn("Logged in with an unhandled role:", data.user.role);
+        window.location.href = "/"; // Redirect to the main landing page
       }
+
     } catch (error) {
-      showMessage(error.message, true);
-    } finally {
-      loginButton.disabled = false;
-      loginButton.innerHTML = '<strong>Login</strong>';
-    }
-  });
+      // --- On Failed Login ---
+      // Display the error message from the backend (e.g., "Invalid credentials")
+      errorMessageElement.textContent = error.message;
+      errorMessageElement.style.display = "block";
 
-  // --- Toggle password visibility ---
-  togglePassword.addEventListener("click", () => {
-    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-    passwordInput.setAttribute("type", type);
-    togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+      // Add the red border to the input fields
+      emailInput.classList.add("input-error");
+      passwordInput.classList.add("input-error");
+    }
   });
 });

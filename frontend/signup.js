@@ -50,13 +50,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("password").value.trim();
     const confirmPassword = document.getElementById("confirmPassword").value.trim();
     const role = document.getElementById("role").value;
+    // Get input elements
+    const inputs = {
+      name: document.getElementById("name"),
+      email: document.getElementById("email"),
+      phone: document.getElementById("phone"),
+      password: document.getElementById("password"),
+      confirmPassword: document.getElementById("confirmPassword"),
+      role: document.getElementById("role"),
+    };
+
     const signupButton = signupForm.querySelector('button[type="submit"]');
+
+    // Reset previous errors
+    let hasError = false;
+    Object.values(inputs).forEach(input => input.classList.remove('input-error'));
 
     // --- Validation ---
     if (!name || !email || !phone || !password || !role) {
+    // Check for empty fields and highlight them
+    for (const key in inputs) {
+      if (!inputs[key].value) {
+        inputs[key].classList.add('input-error');
+        hasError = true;
+      }
+    }
+
+    if (hasError) {
       showMessage("Please fill in all fields!", true);
       return;
     }
+
+    const { name, email, phone, password, confirmPassword, role } = Object.fromEntries(Object.entries(inputs).map(([k, v]) => [k, v.value.trim()]));
+
     if (password !== confirmPassword) {
       showMessage("Passwords do not match!", true);
       return;

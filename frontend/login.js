@@ -4,8 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const passwordInput = document.getElementById("password");
   const errorMessageElement = document.getElementById("loginErrorMessage");
   const togglePassword = document.getElementById("togglePassword");
+  const loginButton = document.getElementById("loginButton"); // Ensure your button has id="loginButton"
 
-  const API_URL = "https://hostels-connect.onrender.com/api";
+  const API_URL = "http://localhost:5000/api";
 
   // --- Password Visibility Toggle ---
   if (togglePassword) {

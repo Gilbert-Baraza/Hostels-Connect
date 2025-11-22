@@ -1,7 +1,7 @@
 // This script now uses the Node.js/MongoDB backend.
 
 // --- Globals-----
-const API_URL = "https://hostels-connect.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 let currentUser = null;
 let hostels = [];
 let bookings = [];

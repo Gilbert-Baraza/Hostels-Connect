@@ -1,7 +1,7 @@
 // This script now uses the Node.js/MongoDB backend.
 
 // --- Globals-----
-const API_URL = "https://hostels-connect.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 let currentUser = null;
 let hostels = [];
 let bookings = [];
@@ -58,7 +58,57 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById("landlordName").textContent = currentUser.name;
+  document.getElementById("landlordNameSidebar").textContent = currentUser.name;
   setupDashboard();
+});
+
+// === SPA Navigation ===
+function setupNavigation() {
+  const navLinks = document.querySelectorAll(".nav-link");
+  const pages = document.querySelectorAll(".page");
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetPage = link.dataset.page;
+
+      pages.forEach(p => p.classList.remove("active"));
+      document.getElementById(`page-${targetPage}`).classList.add("active");
+
+      navLinks.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+    });
+  });
+}
+
+// Sidebar Toggle
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('show');
+    });
+
+    // Close sidebar when clicking outside of it on mobile
+    document.addEventListener('click', function(event) {
+        const isClickInsideSidebar = sidebar.contains(event.target) || sidebarToggle.contains(event.target);
+        if (window.innerWidth < 768 && !isClickInsideSidebar && sidebar.classList.contains('show')) {
+            sidebar.classList.remove('show');
+        }
+    });
+  }
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+            sidebar.classList.remove('show');
+        }
+    });
+  });
+
 });
 
 // --- Dashboard Setup ---
@@ -70,53 +120,57 @@ async function setupDashboard() {
   const pendingBookingsBody = document.getElementById("pendingBookings");
 
   // --- Upload Hostel ---
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if(form) {
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const paymentFrequency = document.getElementById("paymentFrequency").value.trim();
-    const roomType = document.getElementById("roomType").value.trim();
-    const imageInput = document.getElementById("image");
-    if (imageInput.files.length === 0) {
-      showMessage("Please select an image for the hostel.", true);
-      return;
-    }
+        const paymentFrequency = document.getElementById("paymentFrequency").value.trim();
+        const roomType = document.getElementById("roomType").value.trim();
+        const imageInput = document.getElementById("image");
+        if (imageInput.files.length === 0) {
+        showMessage("Please select an image for the hostel.", true);
+        return;
+        }
 
-    const formData = new FormData();
-    const rooms = parseInt(document.getElementById("rooms").value.trim(), 10);
+        const formData = new FormData();
+        const rooms = parseInt(document.getElementById("rooms").value.trim(), 10);
 
-    formData.append("name", document.getElementById("hostelName").value.trim());
-    formData.append("location", document.getElementById("locationSelect").value.trim());
-    formData.append("price", parseFloat(document.getElementById("price").value.trim()));
-    formData.append("roomsAvailable", rooms);
-    formData.append("totalRooms", rooms);
-    formData.append("rulesAndRegulations", document.getElementById("rulesAndRegulations").value.trim());
-    formData.append("landlord", currentUser.name);
-    formData.append("landlordId", currentUser.id);
-    formData.append("paymentFrequency", paymentFrequency);
-    formData.append("roomType", roomType);
-    formData.append("approved", true); // Or false, depending on your workflow
-    formData.append("image", imageInput.files[0]); // Append the file
+        formData.append("name", document.getElementById("hostelName").value.trim());
+        formData.append("location", document.getElementById("locationSelect").value.trim());
+        formData.append("price", parseFloat(document.getElementById("price").value.trim()));
+        formData.append("roomsAvailable", rooms);
+        formData.append("totalRooms", rooms);
+        formData.append("rulesAndRegulations", document.getElementById("rulesAndRegulations").value.trim());
+        formData.append("landlord", currentUser.name);
+        formData.append("landlordId", currentUser.id);
+        formData.append("paymentFrequency", paymentFrequency);
+        formData.append("roomType", roomType);
+        formData.append("approved", true); // Or false, depending on your workflow
+        formData.append("image", imageInput.files[0]); // Append the file
 
-    try {
-      const response = await fetch(`${API_URL}/hostels`, {
-        method: 'POST',
-        body: formData // Send FormData, browser sets Content-Type automatically
-      });
-      if (!response.ok) throw new Error('Upload failed');
+        try {
+        const response = await fetch(`${API_URL}/hostels`, {
+            method: 'POST',
+            body: formData // Send FormData, browser sets Content-Type automatically
+        });
+        if (!response.ok) throw new Error('Upload failed');
 
-      showMessage("✅ Hostel uploaded successfully! Pending admin approval.");
-      form.reset();
-      loadInitialData(); // Refresh data
-    } catch (error) {
-      console.error("Upload error:", error);
-      showMessage("Failed to upload hostel.", true);
-    }
-  });
+        showMessage("✅ Hostel uploaded successfully! Pending admin approval.");
+        form.reset();
+        loadInitialData(); // Refresh data
+        } catch (error) {
+        console.error("Upload error:", error);
+        showMessage("Failed to upload hostel.", true);
+        }
+    });
+  }
 
   // --- Render Hostels ---
   function renderMyHostels() {
-    myHostelsTable.innerHTML = hostels.length
-      ? hostels.filter(h => h.landlordId === currentUser.id).map(h => `
+    if(!myHostelsTable) return;
+    const landlordHostels = hostels.filter(h => h.landlordId === currentUser.id);
+    myHostelsTable.innerHTML = landlordHostels.length
+      ? landlordHostels.map(h => `
         <tr id="hostel-row-${h._id}">
           <td>${h.name}</td>
           <td>${h.location}</td>
@@ -130,6 +184,7 @@ async function setupDashboard() {
 
   // --- Render Bookings ---
   function renderBookings() {
+    if(!pendingBookingsBody) return;
     const pending = bookings.filter(b => b.landlordId === currentUser.id && b.status === "pending");
     pendingBookingsBody.innerHTML = pending.length
       ? pending.map(b => `
@@ -163,16 +218,8 @@ async function setupDashboard() {
         body: JSON.stringify({ status: 'approved' })
       });
 
-      // Decrement hostel rooms
-      const booking = bookings.find(b => b._id === bookingId);
-      const hostel = hostels.find(h => h._id === booking.hostelId);
-      if (hostel && hostel.roomsAvailable > 0) {
-        await fetch(`${API_URL}/hostels/${hostel._id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ roomsAvailable: hostel.roomsAvailable - 1 })
-        });
-      }
+      // This logic is now handled by the backend, no need to manually decrement rooms client-side
+      // The backend should ideally handle room decrementation in a transaction when a booking is approved.
 
       showMessage(`✅ Booking approved!`);
       loadInitialData(); // Refresh data once after all operations
@@ -197,21 +244,54 @@ async function setupDashboard() {
   }
 
   // --- Logout ---
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "../index.html";
-  });
+  const logoutBtn = document.getElementById("logoutBtn");
+  if(logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "../index.html";
+    });
+  }
 
   async function loadInitialData() {
-    const [hostelsRes, bookingsRes] = await Promise.all([
-      fetch(`${API_URL}/hostels`),
-      fetch(`${API_URL}/bookings`)
-    ]);
-    hostels = await hostelsRes.json();
-    bookings = await bookingsRes.json();
-    renderMyHostels();
-    renderBookings();
+    try {
+        const [hostelsRes, bookingsRes] = await Promise.all([
+            fetch(`${API_URL}/hostels`),
+            fetch(`${API_URL}/bookings`)
+        ]);
+        if (!hostelsRes.ok || !bookingsRes.ok) {
+            throw new Error('Failed to fetch initial data.');
+        }
+        hostels = await hostelsRes.json();
+        bookings = await bookingsRes.json();
+        renderMyHostels();
+        renderBookings();
+    } catch(error) {
+        showMessage("Could not load dashboard data.", true);
+        console.error("Data load error:", error);
+    }
   }
 
   loadInitialData();
+  setupNavigation(); // Set up the page-switching logic
 }
+
+
+// Dark mode toggle
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  if (darkModeToggle) {
+    // Load saved preference
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+    if (isDarkMode) {
+        body.classList.add('dark-mode');
+        darkModeToggle.checked = true;
+    }
+
+    darkModeToggle.addEventListener('change', function() {
+        body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', this.checked ? 'enabled' : 'disabled');
+    });
+  }
+});

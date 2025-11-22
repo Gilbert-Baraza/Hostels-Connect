@@ -44,12 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
-    const role = document.getElementById("role").value;
     // Get input elements
     const inputs = {
       name: document.getElementById("name"),
@@ -64,14 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Reset previous errors
     let hasError = false;
-    Object.values(inputs).forEach(input => input.classList.remove('input-error'));
+    Object.values(inputs).forEach(input => input.classList.remove('error'));
 
     // --- Validation ---
-    if (!name || !email || !phone || !password || !role) {
     // Check for empty fields and highlight them
     for (const key in inputs) {
       if (!inputs[key].value) {
-        inputs[key].classList.add('input-error');
+        inputs[key].classList.add('error');
         hasError = true;
       }
     }
@@ -96,13 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
     signupButton.disabled = true;
     signupButton.textContent = 'Registering...';
 
-    // --- Validation ---
-    if (!phone) {
-      showMessage("Please provide a phone number!", true);
-      signupButton.disabled = false;
-      signupButton.textContent = 'Sign Up';
-      return;
-    }
     try {
       const response = await fetch(`${API_URL}/users/register`, {
         method: 'POST',

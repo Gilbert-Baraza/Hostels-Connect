@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up | Hostel Finder</title>
   <link rel="stylesheet" href="signup.css" />
+  <style>
+    .input-error {
+      border: 2px solid #dc3545 !important; /* A shade of red */
+      box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+    }
+  </style>
 </head>
 <body class="signup-page">
   <!-- 🌆 Background Overlay -->
@@ -13,14 +19,14 @@
   <div class="main">
     <form id="signupForm" class="signup-form">
       <h2>Create Your Account</h2>
-      <p class="subtitle">Join Hostel Finder and connect with students or landlords today!</p>
+      <p class="subtitle">Join Hostels Connect  and connect with students or landlords today!</p>
       <hr>
 
       <h4>Full Name</h4>
-      <input type="text" id="name" required>
+      <input type="text" id="name" required placeholder="e.g. Gilbert Baraza">
 
       <h4>Email</h4>
-      <input type="email" id="email" required>
+      <input type="email" id="email" required placeholder="e.g. barazagilbert1@gmail.com">
 
       <h4>Phone Number</h4>
       <input 
@@ -32,10 +38,10 @@
       >
 
       <h4>Password</h4>
-      <input type="password" id="password" required>
+      <input type="password" id="password" required placeholder="e.g 1234@Gilbert">
 
       <h4>Confirm Password</h4>
-      <input type="password" id="confirmPassword" required>
+      <input type="password" id="confirmPassword" required  placeholder="e.g 1234@Gilbert">
 
       <h4>Role</h4>
       <select id="role" required>
@@ -47,7 +53,7 @@
       <button type="submit"><strong>Sign Up</strong></button>
 
       <h4 class="reset">Already have an account? <a href="login.html">Login</a></h4>
-      <small>&copy; 2025 Gilbert Baraza. All rights reserved</small>
+      <small>&copy; 2025 Hostels Connect. All rights reserved</small>
     </form>
   </div>
 
